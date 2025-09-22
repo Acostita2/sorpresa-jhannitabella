@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>🎉 Sorpresa para mi Amor 💖</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #5a189a, #9d4edd);
+      font-family: 'Great Vibes', cursive;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      display: inline-block;
+      max-width: 90%;
+      animation: fadeIn 1s ease-in-out;
+      position: relative;
+      z-index: 2;
+    }
+    #texto {
+      font-size: 2rem;
+      line-height: 1.6;
+      min-height: 120px;
+    }
+    button {
+      background: #a64ca6;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      margin-top: 20px;
+      border-radius: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    button:hover {
+      transform: scale(1.1);
+      background: #c77dff;
+    }
+    #login { margin-top: 100px; }
+    #display {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      letter-spacing: 5px;
+      background: rgba(0,0,0,0.3);
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .teclado {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      gap: 10px;
+      justify-content: center;
+    }
+    .teclado button { font-size: 1.5rem; padding: 15px; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .corazon {
+      position: fixed;
+      bottom: -20px;
+      font-size: 2rem;
+      animation: flotar 6s linear infinite;
+      opacity: 0.8;
+      z-index: 1;
+    }
+    @keyframes flotar {
+      from { transform: translateY(0) scale(1); opacity: 0.9; }
+      to { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Panel numérico -->
+  <div id="login">
+    <h1 id="tituloLogin">💜 Ingresa la fecha especial 💜</h1>
+    <div id="display">____</div>
+    <div class="teclado">
+      <button onclick="agregarNumero('1')">1</button>
+      <button onclick="agregarNumero('2')">2</button>
+      <button onclick="agregarNumero('3')">3</button>
+      <button onclick="agregarNumero('4')">4</button>
+      <button onclick="agregarNumero('5')">5</button>
+      <button onclick="agregarNumero('6')">6</button>
+      <button onclick="agregarNumero('7')">7</button>
+      <button onclick="agregarNumero('8')">8</button>
+      <button onclick="agregarNumero('9')">9</button>
+      <button onclick="borrar()">⌫</button>
+      <button onclick="agregarNumero('0')">0</button>
+      <button onclick="verificar()">✔</button>
+    </div>
+  </div>
+
+  <!-- Mensajes románticos -->
+  <div id="mensajes" style="display:none;">
+    <div class="card">
+      <p id="texto"></p>
+      <button onclick="siguiente()" id="btnSiguiente">Click ❤️</button>
+    </div>
+  </div>
+
+  <!-- Mensaje final -->
+  <div id="sorpresa" style="display:none;">
+    <div class="card">
+      <h1>🎉 Feliz cumple a la reina de mi corazón 👑</h1>
+      <p style="font-size:1.5rem; line-height:1.8; font-family:'Great Vibes', cursive;">
+        ✨ Gracias por existir y llenar mi vida de luz. <br>
+        💘 Eres mi razón de vivir y sonreír. <br>
+        🌹 Que este nuevo año de vida sea tan mágico como tu sonrisa. <br><br>
+        🥰 Pásala bonito, mi amor. Aunque quisiera estar a tu lado, no puedo 😔💔,<br>
+        pero con esto espero sacarte una sonrisa 💕<br><br>
+        ❤️ TE AMO MUCHO, mi Jhannita perfecta ❤️ <br>
+        🤗 Te mando un fuerte abrazo y un besote bien ricote 😘💋
+      </p>
+    </div>
+  </div>
+
+  <!-- Música -->
+  <audio id="musica" loop>
+    <source src="romantic-background-112194.mp3" type="audio/mp3">
+    Tu navegador no soporta el audio.
+  </audio>
+
+  <script>
+    const mensajes = [
+      "🌸 Hoy es un día especial ✨",
+      "💖 Para ti, para mí y para todo el mundo 🌍",
+      "🌹 Un día como hoy nació la niña más hermosa del universo 💫",
+      "😍 La bonita 💕",
+      "💎 La que hace todo bien ✨",
+      "🌟 La que ilumina la vida con su belleza y ternura 💖",
+      "💘 Y en especial la niña a la que amo con todo mi corazón y alma ❤️",
+      "🌹 Y esa niña hermosa y perfecta eres tú...",
+      "👑 Jhanna Valentina Darleny Sarmiento Ayala 💎"
+    ];
+    let index = 0;
+    let i = 0;
+    let speed = 60;
+    let claveIngresada = "";
+    let musicaIniciada = false;
+
+    function escribirTexto(texto, elementoId, callback) {
+      const elemento = document.getElementById(elementoId);
+      elemento.textContent = "";
+      i = 0;
+      function escribir() {
+        if (i < texto.length) {
+          elemento.textContent += texto.charAt(i);
+          i++;
+          setTimeout(escribir, speed);
+        } else if (callback) callback();
+      }
+      escribir();
+    }
+
+    function agregarNumero(num) {
+      if (claveIngresada.length < 4) {
+        claveIngresada += num;
+        actualizarDisplay();
+      }
+    }
+    function borrar() {
+      claveIngresada = claveIngresada.slice(0, -1);
+      actualizarDisplay();
+    }
+    function actualizarDisplay() {
+      let display = claveIngresada.padEnd(4, "_");
+      document.getElementById("display").textContent = display;
+    }
+    function verificar() {
+      if (claveIngresada === "2209") {
+        document.getElementById("login").style.display="none";
+        document.getElementById("tituloLogin").style.display="none";
+        document.getElementById("mensajes").style.display="block";
+        escribirTexto(mensajes[index], "texto");
+      } else {
+        alert("❌ Contraseña incorrecta, intenta de nuevo 💔");
+        claveIngresada = "";
+        actualizarDisplay();
+      }
+    }
+
+    function siguiente() {
+      if(!musicaIniciada){
+        document.getElementById("musica").play().catch(e=>console.log("Autoplay bloqueado"));
+        musicaIniciada = true;
+      }
+      index++;
+      if(index < mensajes.length) escribirTexto(mensajes[index], "texto");
+      else mostrarSorpresa();
+    }
+
+    function mostrarSorpresa() {
+      document.getElementById("mensajes").style.display="none";
+      document.getElementById("sorpresa").style.display="block";
+    }
+
+    function crearCorazon() {
+      const corazon = document.createElement("div");
+      corazon.classList.add("corazon");
+      corazon.textContent = "💜";
+      corazon.style.left = Math.random()*100 + "vw";
+      corazon.style.animationDuration = (4 + Math.random()*4) + "s";
+      document.body.appendChild(corazon);
+      setTimeout(()=>corazon.remove(),8000);
+    }
+    setInterval(crearCorazon,800);
+  </script>
+
+</body>
+</html>
